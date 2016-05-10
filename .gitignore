@@ -1,0 +1,9 @@
+# Visual Studio Code
+.vscode/
+
+# Build Output Files
+build/
+
+# Waf Build
+.lock-waf*
+.waf*
