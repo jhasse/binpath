@@ -45,7 +45,7 @@ namespace binpath {
 		char filename[MAX_PATH];
 		GetModuleFileName(NULL, filename, MAX_PATH);
 		std::string tmp(filename);
-		*binpath = tmp.substr(0, tmp.find("\\bin") + 1);
+		*binpath = tmp.substr(0, tmp.find_last_of("\\/") + 1);
 	#endif
 		return *binpath;
 	}
