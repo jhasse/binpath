@@ -175,13 +175,15 @@ _br_find_exe (BrInitError *error)
  * Returns a filename which must be freed, or NULL on error.
  */
 static char *
+#ifndef ENABLE_BINRELOC
 _br_find_exe_for_symbol (const void *symbol, BrInitError *error)
 {
-#ifndef ENABLE_BINRELOC
 	if (error)
 		*error = BR_INIT_ERROR_DISABLED;
 	return (char *) NULL;
 #else
+_br_find_exe_for_symbol (const void *symbol, BrInitError*)
+{
 	#define SIZE PATH_MAX + 100
 	FILE *f;
 	size_t address_string_len;
@@ -276,12 +278,6 @@ _br_find_exe_for_symbol (const void *symbol, BrInitError *error)
 		return strdup (found);
 #endif /* ENABLE_BINRELOC */
 }
-
-
-#ifndef BINRELOC_RUNNING_DOXYGEN
-	#undef NULL
-	#define NULL ((void *) 0) /* typecasted as char* for C++ type safeness */
-#endif
 
 static char *exe = (char *) NULL;
 
@@ -739,7 +735,8 @@ br_strndup (const char *str, size_t size)
 char *
 br_dirname (const char *path)
 {
-	char *end, *result;
+	const char *end;
+	char *result;
 
 	if (path == (const char *) NULL)
 		return (char *) NULL;
