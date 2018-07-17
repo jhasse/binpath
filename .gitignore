@@ -2,7 +2,7 @@
 .vscode/
 
 # Build Output Files
-build/
+/build*/
 
 # Waf Build
 .lock-waf*
