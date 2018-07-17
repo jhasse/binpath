@@ -11,9 +11,8 @@ def configure(conf):
 def build(bld):
 	source_files = bld.path.ant_glob('src/*.cpp')
 	if platform.system() == "Linux":
-		bld.objects(source='src/linux/binreloc.c', target='binreloc', features='c',
-		            defines='ENABLE_BINRELOC')
+		bld.objects(source='src/linux/binreloc.c', target='binreloc', features='c')
 	bld.stlib(features='cxx', source=source_files,
 	          target='binpath',
-			  cxxflags=['-std=c++11'],
-			  use='binreloc')
+	          cxxflags=['-std=c++11'],
+	          use='binreloc')

@@ -13,11 +13,9 @@
 #ifndef __BINRELOC_C__
 #define __BINRELOC_C__
 
-#ifdef ENABLE_BINRELOC
-	#include <sys/types.h>
-	#include <sys/stat.h>
-	#include <unistd.h>
-#endif /* ENABLE_BINRELOC */
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
@@ -38,11 +36,6 @@ extern "C" {
 static char *
 _br_find_exe (BrInitError *error)
 {
-#ifndef ENABLE_BINRELOC
-	if (error)
-		*error = BR_INIT_ERROR_DISABLED;
-	return NULL;
-#else
 	char *path, *path2, *line, *result;
 	size_t buf_size;
 	ssize_t size;
@@ -166,7 +159,6 @@ _br_find_exe (BrInitError *error)
 	free (line);
 	fclose (f);
 	return path;
-#endif /* ENABLE_BINRELOC */
 }
 
 
@@ -174,17 +166,8 @@ _br_find_exe (BrInitError *error)
  * Find the canonical filename of the executable which owns symbol.
  * Returns a filename which must be freed, or NULL on error.
  */
-static char *
-#ifndef ENABLE_BINRELOC
-_br_find_exe_for_symbol (const void *symbol, BrInitError *error)
-{
-	if (error)
-		*error = BR_INIT_ERROR_DISABLED;
-	return (char *) NULL;
-#else
-_br_find_exe_for_symbol (const void *symbol, BrInitError*)
-{
-	#define SIZE PATH_MAX + 100
+static char* _br_find_exe_for_symbol(const void* symbol) {
+#define SIZE PATH_MAX + 100
 	FILE *f;
 	size_t address_string_len;
 	char *address_string, line[SIZE], *found;
@@ -276,7 +259,6 @@ _br_find_exe_for_symbol (const void *symbol, BrInitError*)
 		return (char *) NULL;
 	else
 		return strdup (found);
-#endif /* ENABLE_BINRELOC */
 }
 
 static char *exe = (char *) NULL;
@@ -318,10 +300,8 @@ br_init (BrInitError *error)
  *
  * @returns 1 on success, 0 if a filename cannot be found.
  */
-int
-br_init_lib (BrInitError *error)
-{
-	exe = _br_find_exe_for_symbol ((const void *) "", error);
+int br_init_lib() {
+	exe = _br_find_exe_for_symbol((const void*)"");
 	return exe != NULL;
 }
 

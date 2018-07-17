@@ -22,7 +22,7 @@ namespace binpath {
 		binpath = new std::string;
 	#if defined(__linux__)
 		BrInitError error;
-		if (br_init(&error) == 0 && error != BR_INIT_ERROR_DISABLED) {
+		if (br_init(&error) == 0) {
 			std::stringstream tmp;
 			tmp << "BinReloc failed to initialize (error code " << error << ")";
 			throw std::runtime_error(tmp.str());
